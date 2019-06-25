@@ -16,6 +16,15 @@ campus_A_2019 <- read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Model
 campus_B_2019 <- read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_B_2019.csv",row.names=1)
 campus_C_2019 <- read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_C_2019.csv",row.names=1)
 
+#Nombre de los alumnos por campus
+alumnos_campus_A_2018 <- as_tibble(read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_A_2018.csv",sep="")[,1]) %>% rename(alumnos=value)
+alumnos_campus_B_2018 <- as_tibble(read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_B_2018.csv",sep="")[,1]) %>% rename(alumnos=value)
+alumnos_campus_C_2018 <- as_tibble(read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_C_2018.csv",sep="")[,1]) %>% rename(alumnos=value)
+alumnos_campus_A_2019 <- as_tibble(read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_A_2019.csv",sep="")[,1]) %>% rename(alumnos=value)
+alumnos_campus_B_2019 <- as_tibble(read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_B_2019.csv",sep="")[,1]) %>% rename(alumnos=value)
+alumnos_campus_C_2019 <- as_tibble(read.csv("/home/wilantgomari/Dropbox/Trabajos/Git/knotion/Modelo de Rasch/prueba1/results/campus_C_2019.csv",sep="")[,1]) %>% rename(alumnos=value)
+
+
 
 #Unir las evaluaciones del 2018 y 2019 
 datos2018 <- rbind(campus_A_2018,campus_B_2018,campus_C_2018)
@@ -53,10 +62,32 @@ m3<-m2+nrow(campus_C_2019)
 habilidad_campus_A_2018 <- habilidad2018 %>% select(theta)%>% rename(habilidad=theta) %>% slice(1:n1)
 habilidad_campus_B_2018 <- habilidad2018 %>% select(theta)%>% rename(habilidad=theta) %>% slice((n1+1):n2)                                                                                                                                            
 habilidad_campus_C_2018 <- habilidad2018 %>% select(theta)%>% rename(habilidad=theta) %>% slice((n2+1):n3)                                                                                                                                            
+
+#Rankin de los alumnos 2018
+alumnos_campus_A_2018$habilidad <- habilidad_campus_A_2018[[1]]
+alumnos_campus_B_2018$habilidad <- habilidad_campus_B_2018[[1]]
+alumnos_campus_C_2018$habilidad <- habilidad_campus_C_2018[[1]]
+
+order_alumnos_campus_A_2018 <- arrange(alumnos_campus_A_2018,habilidad)
+order_alumnos_campus_B_2018 <- arrange(alumnos_campus_B_2018,habilidad)
+order_alumnos_campus_C_2018 <- arrange(alumnos_campus_C_2018,habilidad)
+
+
+
 #ciclo 2019
 habilidad_campus_A_2019 <- habilidad2019 %>% select(theta)%>% rename(habilidad=theta) %>% slice(1:m1)
 habilidad_campus_B_2019 <- habilidad2019 %>% select(theta)%>% rename(habilidad=theta) %>% slice((m1+1):m2)                                                                                                                                            
 habilidad_campus_C_2019 <- habilidad2019 %>% select(theta)%>% rename(habilidad=theta) %>% slice((m2+1):m3)     
+
+#Rankin de los alumnos 2019
+alumnos_campus_A_2019$habilidad <- habilidad_campus_A_2019[[1]]
+alumnos_campus_B_2019$habilidad <- habilidad_campus_B_2019[[1]]
+alumnos_campus_C_2019$habilidad <- habilidad_campus_C_2019[[1]]
+
+order_alumnos_campus_A_2019 <- arrange(alumnos_campus_A_2019,habilidad)
+order_alumnos_campus_B_2019 <- arrange(alumnos_campus_B_2019,habilidad)
+order_alumnos_campus_C_2019 <- arrange(alumnos_campus_C_2019,habilidad)
+
 
 
 
@@ -65,12 +96,20 @@ nivel_campus_A_2018 <- habilidad_campus_A_2018 %>% summarise(mean = mean(habilid
 nivel_campus_B_2018 <- habilidad_campus_B_2018 %>% summarise(mean = mean(habilidad))
 nivel_campus_C_2018 <- habilidad_campus_C_2018 %>% summarise(mean = mean(habilidad))
 
+campus_2018 <- c("campus_A_2018","campus_B_2018","campus_C_2018")
+nivel_académico_2018 <- c(nivel_campus_A_2018$mean,nivel_campus_B_2018$mean,nivel_campus_C_2018$mean)
+nivel_académico_campus_2018 <- data.frame(campus_2018,nivel_académico_2018)
+order_nivel_académico_campus_2018 <- arrange(nivel_académico_campus_2018,nivel_académico_2018)
 
 #Rankin de las escuelas 2019
 nivel_campus_A_2019 <- habilidad_campus_A_2019 %>% summarise(mean = mean(habilidad))
 nivel_campus_B_2019 <- habilidad_campus_B_2019 %>% summarise(mean = mean(habilidad))
 nivel_campus_C_2019 <- habilidad_campus_C_2019 %>% summarise(mean = mean(habilidad))
 
+campus_2019 <- c("campus_A_2019","campus_B_2019","campus_C_2019")
+nivel_académico_2019 <- c(nivel_campus_A_2019$mean,nivel_campus_B_2019$mean,nivel_campus_C_2019$mean)
+nivel_académico_campus_2019 <- data.frame(campus_2019,nivel_académico_2019)
+order_nivel_académico_campus_2019 <- arrange(nivel_académico_campus_2019,nivel_académico_2019)
 
 
 
