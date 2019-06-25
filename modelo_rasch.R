@@ -1,10 +1,12 @@
 #Instalar paquetes
 install.packages('TAM')
 install.packages('tidyverse')
+install.packages('plotly')
 
 #Cargar librería
 library(TAM)
 library(tidyverse)
+library(plotly)
 
 
 #Cargar los archivos de evaluaciones de los Campus A,B y C
@@ -37,9 +39,44 @@ rasch2019 <- TAM::tam.mml.2pl(datos2019,irtmodel="2PL")
 
 #Selecionar las variables AXsi_.Cat1 y B.Cat1.Dim1 que son las variables 
 #de dificultad y descriminación del item respectivamente, y las renombramos
-item2018 <- rasch2018$item %>% select(AXsi_.Cat1, B.Cat1.Dim1)%>% rename(Dificultad=AXsi_.Cat1, Discriminación=B.Cat1.Dim1)
-item2019 <- rasch2019$item %>% select(AXsi_.Cat1, B.Cat1.Dim1)%>% rename(Dificultad=AXsi_.Cat1, Discriminación=B.Cat1.Dim1)
+item2018 <- rasch2018$item %>% select(AXsi_.Cat1, B.Cat1.Dim1)%>% rename(Dificultad_2018=AXsi_.Cat1, Discriminación=B.Cat1.Dim1)
+item2019 <- rasch2019$item %>% select(AXsi_.Cat1, B.Cat1.Dim1)%>% rename(Dificultad_2019=AXsi_.Cat1, Discriminación=B.Cat1.Dim1)
 
+
+#gráfica de dificultad al item 2018 y 2019
+#El color verde representa al valor 2018 y rojo al 2019
+
+item <- c(paste("Item",1:39,sep=""))
+item_dif_2018 <-item2018$Dificultad
+item_dif_2019 <-item2019$Dificultad
+
+data <- data.frame(x=item, value1=item_dif_2018, value2=item_dif_2019)
+
+ggplot(data) +
+  geom_segment( aes(x=x, xend=x, y=value1, yend=value2), color="grey") +
+  geom_point( aes(x=x, y=value1), color=rgb(0.2,0.7,0.1,0.5), size=3 ) +
+  geom_point( aes(x=x, y=value2), color=rgb(0.7,0.2,0.1,0.5), size=3 ) +
+  coord_flip() 
+
+ggplot(data) +
+  geom_segment( aes(x=x, xend=x, y=value1, yend=value2), color="grey") +
+  geom_point( aes(x=x, y=value1), color=rgb(0.2,0.7,0.1,0.5), size=3 ) +
+  geom_point( aes(x=x, y=value2), color=rgb(0.7,0.2,0.1,0.5), size=3 ) +
+  coord_flip()+
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+  ) +
+  xlab("") +
+  ylab("Logit")
+
+#Se calcula la diferencia de la dificultad 2019 y 2018.
+#Si el valor es positivo nos indica que el item correspondiente al 2019 fue mejor,
+#es decir los alumnos mejoraron respecto a ese reactivo.
+
+item <- as_tibble(item)
+item$diferencia <- c(item2018$Dificultad-item2019$Dificultad)
 
 #Habilidad de los estudiantes para el 2018 y 2019 
 #Utilizar la funcion tam.wle() (ver documentación del package TAM)
