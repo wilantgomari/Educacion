@@ -1,4 +1,4 @@
-# knotion
+# Educación
 Modelo de Rasch
 
 En tres campus (Campus A, Campus B y Campus C) se aplicó un examen para medir habilidades lectoras de niños de 6o de primaria en los ciclos escolares (year) 2017-2018 (2018) y 2018-2019 (2019). El examen tiene 39 reactivos; cada reactivo (idQuestion) tiene una dificultad y discriminación distintas (por estimar, utilizando el model Rasch), y cada niño contestó (o dejó en blanco) correcta o incorrectamente estas preguntas. 
